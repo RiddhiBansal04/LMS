@@ -41,8 +41,13 @@ export const addCourse = async (req, res) => {
         }
 
         const parsedCourseData = await JSON.parse(courseData)
+        const educatorUser = await clerkClient.users.getUser(educatorId);
 
-        parsedCourseData.educator = educatorId
+        // parsedCourseData.educator = educatorId
+        parsedCourseData.educator = {
+            id: educatorId,
+            name: `${educatorUser.firstName || ''} ${educatorUser.lastName || ''}`.trim()
+    };
 
         const newCourse = await Course.create(parsedCourseData)
 
